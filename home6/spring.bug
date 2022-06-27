@@ -1,0 +1,21 @@
+
+model {
+    # accounting for mass measurment error, 0.5 gram std, sig = 1/sqrt(tau), tau = 1/sig^2
+    # length measurement error, 0.5 mm
+    # Time measurement error 0.005 std.
+    tau <- 1/pow(0.5,2);
+    tau.T <- 1/pow(0.005,2);
+    for(i in 1:length(M)){
+        #mu.m <- k;
+        T[i] ~ dnorm(10 * 2 * 3.14 * sqrt((M[i]+er)/k), tau.T);
+        I[i] ~ dnorm((g*M[i]+er)*10^(-3)/k, tau);
+        #I[i] ~ dnorm(mu.i,tau);
+        #T[i] ~ dnorm(t.mu[i],tau.I);
+    }
+    #error on mass measurement and extension measurement
+    er ~ dnorm(0,tau);
+    #uniform prior for k
+    k ~ dunif(0,100000);
+    g ~ dunif(5,15);
+}
+
